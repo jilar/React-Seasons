@@ -1,4 +1,4 @@
-Application Detects what season user is in.
+Application Detects what season user is in, based on geolocation and time of year.
 
 If the user is the northern hemisphere between October to March or in the Southern hemisphere between March to October winter screen will show.
 
