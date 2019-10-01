@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import SeasonDisplay from "./SeasonDisplay"
+import LoadingSpinner from "./LoadingSpinner"
 
 //class Component always extends React.Component
 class App extends React.Component{
@@ -28,20 +29,25 @@ class App extends React.Component{
       }
     );
   }
-  //happens with each class update; occurs AFTER render() is invoked
-  componentDidUpdate(){
 
+renderContent(){
+  if(this.state.errorMessage && !this.state.lat){
+    return <div>Error: {this.state.errorMessage}</div>;
+  } else if(!this.state.ErrorMessage && this.state.lat) {
+    return <SeasonDisplay lat={this.state.lat}/>;
   }
+    return <LoadingSpinner msg= "Allow geolocation?"/>;
+
+}
 
   //class component must always have a render() method
   //dont initialize anything in render method,
   render() {
-      if(this.state.errorMessage && !this.state.lat){
-        return <div>Error: {this.state.errorMessage}</div>;
-      } else if(!this.state.ErrorMessage && this.state.lat) {
-        return <SeasonDisplay lat={this.state.lat}/>;
-      }
-        return <div>Loading</div>;
+    return(
+      <div>
+        {this.renderContent()}
+      </div>
+    );
   }
 }
 
