@@ -1,12 +1,57 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import SeasonDisplay from "./SeasonDisplay"
+import LoadingSpinner from "./LoadingSpinner"
 
-ReactDOM.render(<App />, document.getElementById('root'));
+//class Component always extends React.Component
+class App extends React.Component{
+  // //construction class particular to javascript, called when instance of app component is created
+  // constructor(props){
+  // //required, constructor function from React.component
+  //   super(props);
+  // //ONLY TIME to do direct assignment
+  // //to this.state
+  //   this.state={lat: null, errorMessage:''};
+  // }
+  state={lat: null, errorMessage:''};
+  //happens upon first render, place initial data loading here
+  componentDidMount(){
+    //get geolocation
+    window.navigator.geolocation.getCurrentPosition(
+      //success callback function
+      (position) => {
+        //update state with setState
+        this.setState({lat:position.coords.latitude});
+      },
+      //failure callback funtion
+      (err) => {
+        this.setState({errorMessage:err.message})
+      }
+    );
+  }
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+renderContent(){
+  if(this.state.errorMessage && !this.state.lat){
+    return <div>Error: {this.state.errorMessage}</div>;
+  } else if(!this.state.ErrorMessage && this.state.lat) {
+    return <SeasonDisplay lat={this.state.lat}/>;
+  }
+    return <LoadingSpinner msg= "Allow geolocation?"/>;
+
+}
+
+  //class component must always have a render() method
+  //dont initialize anything in render method,
+  render() {
+    return(
+      <div>
+        {this.renderContent()}
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <App />,
+  document.querySelector('#root')
+);
